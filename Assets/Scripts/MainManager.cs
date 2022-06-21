@@ -23,6 +23,7 @@ public class MainManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
         
@@ -73,6 +74,19 @@ public class MainManager : MonoBehaviour
     {
         m_GameOver = true;
         GameOverText.SetActive(true);
-        BestScoreText.text = $"Best Score : {PersistanceManager.Instance.playerName} : {m_Points}";
+
+        if (m_Points > PersistanceManager.Instance._highScore) // display new name with current points as high score
+        {
+            BestScoreText.text = $"Best Score : {PersistanceManager.Instance._playerName} : {m_Points}";
+            PersistanceManager.Instance._highScorePlayer = PersistanceManager.Instance._playerName; // save current player as high score player
+            PersistanceManager.Instance._highScore = m_Points; // save current points as highScore
+            PersistanceManager.Instance.SavePlayerData(); // Save data so that it is available next session
+
+        }
+        else // display old name and highscore
+        {
+            BestScoreText.text = $"Best Score : {PersistanceManager.Instance._highScorePlayer} : {PersistanceManager.Instance._highScore}";
+        }
+
     }
 }
